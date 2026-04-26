@@ -9,7 +9,7 @@
 
     <section class="hero">
       <div class="hero-content">
-        <div class="badge animate-fade-up">�� It's your special day!</div>
+        <div class="badge animate-fade-up">为特殊的日子庆祝!</div>
 
         <h1 class="hero-title animate-fade-up delay-100">
           Happy Birthday,<br>
@@ -22,7 +22,7 @@
         </h1>
 
         <p class="hero-subtitle animate-fade-up delay-200">
-          Another year of being absolutely amazing — here's to you and everything wonderful coming your way 🥳
+          又一年的精彩——为你和所有美好的未来干杯 🥳
         </p>
 
         <!-- Countdown -->
@@ -30,7 +30,7 @@
           <p class="countdown-label">{{ countdownMessage }}</p>
           <div v-if="isBirthday" class="birthday-today">
             <span class="birthday-today-text">🎂 Happy Birthday, CR! 🎂</span>
-            <span class="birthday-today-badge">今天就是你的生日！✨</span>
+            <span class="birthday-today-badge">今天就是你的生日！</span>
           </div>
           <div v-else class="countdown-grid">
             <div class="countdown-unit">
@@ -57,22 +57,17 @@
 
         <!-- Main nav buttons -->
         <div class="hero-buttons animate-fade-up delay-400">
-          <RouterLink to="/wishes" class="btn btn-primary">💌 Wishes</RouterLink>
-          <RouterLink to="/photos" class="btn btn-secondary">📸 Photos</RouterLink>
-          <RouterLink to="/letter" class="btn btn-outline">✉️ Letter</RouterLink>
+          <RouterLink to="/wishes" class="btn btn-primary">💌 祝福</RouterLink>
+          <RouterLink to="/photos" class="btn btn-secondary">📸 照片墙</RouterLink>
+          <RouterLink to="/letter" class="btn btn-outline">✉️ 信</RouterLink>
         </div>
 
         <!-- Feature entry capsules -->
-        <div class="feature-capsules animate-fade-up delay-500">
-          <RouterLink to="/wishlist" class="capsule-btn">
-            <span class="capsule-icon">✨</span>心愿单
-          </RouterLink>
-          <RouterLink to="/cake" class="capsule-btn">
-            <span class="capsule-icon">🎂</span>点蛋糕
-          </RouterLink>
-          <RouterLink to="/fortune" class="capsule-btn">
-            <span class="capsule-icon">🔮</span>今日运势
-          </RouterLink>
+        <!-- 剩下三个改成和上面三个一样的样式 -->
+        <div class="hero-buttons animate-fade-up delay-400">
+          <RouterLink to="/wishlist" class="btn btn-primary2">✨ 心愿</RouterLink>
+          <RouterLink to="/cake" class="btn btn-secondary2">🎂 戳蛋糕</RouterLink>
+          <RouterLink to="/fortune" class="btn btn-outline2">🔮 运势</RouterLink>
         </div>
       </div>
     </section>
@@ -360,6 +355,39 @@ onUnmounted(() => {
   border: 1.5px solid var(--border-color);
 }
 .btn-outline:hover {
+  background: var(--bg-card);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.btn-primary2 {
+  background: var(--color-lavender-deep);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary2:hover {
+  opacity: 0.88;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary2 {
+  background: var(--color-pink-deep);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+.btn-secondary2:hover {
+  opacity: 0.88;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-outline2 {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border-color);
+}
+.btn-outline2:hover {
   background: var(--bg-card);
   color: var(--accent);
   transform: translateY(-2px);

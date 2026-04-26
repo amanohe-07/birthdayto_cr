@@ -2,13 +2,13 @@
   <main class="photos">
     <div class="photos__header reveal-hidden" ref="headerRef" :class="{ 'reveal-visible': headerVisible }">
       <h2 class="photos__title">📸 照片墙</h2>
-      <p class="photos__sub">每一张都是值得记住的瞬间 ✨</p>
+      <p class="photos__sub">哈哈哈这里只有搞笑点的，你自己加吧</p>
     </div>
 
     <div class="photos__wall">
       <div
         v-for="photo in photos"
-        :key="photo.index"
+        :key="photo.id"
         class="photos__item"
         :class="{ 'photos__item--active': photo.active }"
         :style="photo.style"
@@ -16,27 +16,40 @@
       >
         <div class="photos__tape"></div>
         <img
+          v-if="!photo.useFallback"
           :src="photo.src"
-          :alt="`照片 ${photo.index + 1}`"
+          :alt="`照片 ${photo.id}`"
           class="photos__img"
-          @error="onImgError($event, photo)"
+          @error="onImgError(photo)"
           loading="lazy"
         />
-        <div v-if="photo.useFallback" class="photos__fallback" :style="{ background: photo.fallbackBg }">
+        <div v-else class="photos__fallback" :style="{ background: photo.fallbackBg }">
           <span class="photos__fallback-icon">{{ photo.fallbackIcon }}</span>
         </div>
+        <button class="photos__delete" @click.stop="deletePhoto(photo.id)" title="删除照片">✕</button>
       </div>
     </div>
+
+    <button class="photos__add-btn" @click="triggerFileSelect">+ 添加照片</button>
+    <input
+      type="file"
+      ref="fileInput"
+      accept="image/*"
+      multiple
+      style="display: none"
+      @change="handleFileSelect"
+    />
   </main>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 
 const headerRef = ref(null)
 const headerVisible = ref(false)
+const fileInput = ref(null)
 
-// Deterministic values for rotation/offset/size – consistent on every render
+// 默认照片占位符图标和渐变色（用于默认图片加载失败时）
 const fallbackIcons = ['🌸', '✨', '💕', '🎂', '⭐', '💫', '🌙', '🦋', '🍬', '💗', '🌈', '🎉']
 const fallbackColors = [
   'linear-gradient(135deg,#f7c5d0,#d4b8e0)',
@@ -53,61 +66,158 @@ const fallbackColors = [
   'linear-gradient(135deg,#f8e8b0,#d4b8e0)',
 ]
 
-// Size buckets: 0=small, 1=medium, 2=large
+// 尺寸类别：0=小(140px)，1=中(170px)，2=大(200px)
 const sizeBuckets = [1, 2, 0, 1, 2, 0, 1, 0, 2, 1, 0, 2]
+const widths = ['140px', '170px', '200px']
 
-function seeded(i, mod) {
-  return ((i * 137 + 43) % mod)
+// 确定性随机函数（基于 id 和种子）
+function seededRandom(seed) {
+  const x = Math.sin(seed) * 10000
+  return x - Math.floor(x)
 }
 
-const photos = Array.from({ length: 12 }, (_, i) => {
-  const rotSign = i % 2 === 0 ? 1 : -1
-  const rot = rotSign * (1 + seeded(i, 5) * 1.2) // -6 to +6
-  const tx = (seeded(i + 1, 18) - 9) // -9 to +9 px
-  const ty = (seeded(i + 2, 14) - 7) // -7 to +7 px
-  const size = sizeBuckets[i]
-  const widths = ['140px', '170px', '200px']
-  const w = widths[size]
-
+// 生成照片样式（旋转、偏移、宽度）
+function generatePhotoStyle(id, sizeType) {
+  const rotSign = id % 2 === 0 ? 1 : -1
+  const rot = rotSign * (1 + (seededRandom(id * 7) * 5))  // -6 ~ +6 度
+  const tx = (seededRandom(id * 13) * 18) - 9            // -9 ~ +9 px
+  const ty = (seededRandom(id * 31) * 14) - 7            // -7 ~ +7 px
+  const width = widths[sizeType]
   return {
-    index: i,
-    src: new URL(`../assets/photos/${String(i + 1).padStart(2, '0')}.jpg`, import.meta.url).href,
-    active: false,
-    useFallback: false,
-    fallbackBg: fallbackColors[i],
-    fallbackIcon: fallbackIcons[i],
-    style: {
-      '--base-rotate': `${rot}deg`,
-      transform: `rotate(${rot}deg) translate(${tx}px, ${ty}px)`,
-      width: w,
-      zIndex: 1,
-    },
+    transform: `rotate(${rot}deg) translate(${tx}px, ${ty}px)`,
+    width: width,
+    zIndex: 1,
   }
-})
-
-function onImgError(event, photo) {
-  photo.useFallback = true
-  event.target.style.display = 'none'
 }
 
+// 生成默认照片（从 assets/photos/ 加载 01.png ~ 12.png）
+function generateDefaultPhotos() {
+  const defaultPhotos = []
+  for (let i = 0; i < 12; i++) {
+    const sizeType = sizeBuckets[i]
+    const style = generatePhotoStyle(i, sizeType)
+    defaultPhotos.push({
+      id: i,
+      src: new URL(`../assets/photos/${String(i + 1).padStart(2, '0')}.png`, import.meta.url).href,
+      active: false,
+      useFallback: false,
+      fallbackBg: fallbackColors[i % fallbackColors.length],
+      fallbackIcon: fallbackIcons[i % fallbackIcons.length],
+      style: style,
+    })
+  }
+  return defaultPhotos
+}
+
+// 从 localStorage 加载或初始化照片列表
+const photos = ref([])
+
+function loadPhotos() {
+  const stored = localStorage.getItem('cr_photos')
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored)
+      // 恢复时重新生成样式（确保样式属性完整，并且 active 重置为 false）
+      photos.value = parsed.map(p => ({
+        ...p,
+        active: false,
+        style: generatePhotoStyle(p.id, p.sizeType || (p.style?.width ? widths.indexOf(p.style.width) : 1)),
+      }))
+      return
+    } catch (e) {}
+  }
+  // 无存储则加载默认照片
+  photos.value = generateDefaultPhotos()
+  // 保存一份默认数据
+  savePhotos()
+}
+
+function savePhotos() {
+  // 存储时只保留必要字段，不存储 style 中的计算值（恢复时会重新生成）
+  const toStore = photos.value.map(p => ({
+    id: p.id,
+    src: p.src,
+    useFallback: p.useFallback,
+    fallbackBg: p.fallbackBg,
+    fallbackIcon: p.fallbackIcon,
+    sizeType: widths.findIndex(w => w === p.style.width),
+  }))
+  localStorage.setItem('cr_photos', JSON.stringify(toStore))
+}
+
+watch(photos, () => savePhotos(), { deep: true })
+
+// 图片加载失败时显示 fallback
+function onImgError(photo) {
+  photo.useFallback = true
+}
+
+// 点击切换选中状态（点击后放大，再次点击其他照片会切换）
 function togglePhoto(photo) {
   const wasActive = photo.active
-  photos.forEach(p => { p.active = false; p.style.zIndex = 1 })
+  photos.value.forEach(p => { p.active = false; p.style.zIndex = 1 })
   if (!wasActive) {
     photo.active = true
     photo.style.zIndex = 10
   }
 }
 
+// 删除照片
+function deletePhoto(id) {
+  photos.value = photos.value.filter(p => p.id !== id)
+  // 如果删除后没有照片了，可以可选重新添加默认照片，但不强制
+}
+
+// 添加照片
+function triggerFileSelect() {
+  fileInput.value.click()
+}
+
+function handleFileSelect(event) {
+  const files = Array.from(event.target.files)
+  if (files.length === 0) return
+
+  // 获取当前最大 id
+  let maxId = photos.value.length > 0 ? Math.max(...photos.value.map(p => p.id)) : -1
+
+  files.forEach((file, idx) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const dataUrl = e.target.result
+      const newId = maxId + idx + 1
+      // 为新照片随机分配尺寸类别 (0,1,2)
+      const sizeType = Math.floor(Math.random() * 3)
+      const style = generatePhotoStyle(newId, sizeType)
+      photos.value.push({
+        id: newId,
+        src: dataUrl,
+        active: false,
+        useFallback: false,
+        fallbackBg: fallbackColors[newId % fallbackColors.length],
+        fallbackIcon: fallbackIcons[newId % fallbackIcons.length],
+        style: style,
+        sizeType: sizeType,
+      })
+    }
+    reader.readAsDataURL(file)
+  })
+  // 清空 input 值，以便同一文件可以重复添加
+  event.target.value = ''
+}
+
+// IntersectionObserver 控制标题动画
 let observer = null
 onMounted(() => {
+  loadPhotos()
   observer = new IntersectionObserver(
     ([entry]) => { if (entry.isIntersecting) headerVisible.value = true },
     { threshold: 0.1 }
   )
   if (headerRef.value) observer.observe(headerRef.value)
 })
-onUnmounted(() => { if (observer) observer.disconnect() })
+onUnmounted(() => {
+  if (observer) observer.disconnect()
+})
 </script>
 
 <style scoped>
@@ -115,6 +225,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   min-height: calc(100vh - 60px);
   background: var(--gradient-hero);
   padding: var(--space-8) var(--space-4) var(--space-16);
+  position: relative;
 }
 
 .photos__header {
@@ -135,14 +246,13 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 }
 
 .photos__wall {
-  max-width: 980px;
+  max-width: 1100px;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--space-5);
   padding: var(--space-4) var(--space-2);
-  /* Let items wrap naturally with their offsets for the messy feel */
 }
 
 .photos__item {
@@ -168,7 +278,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   z-index: 10 !important;
 }
 
-/* Tape strip across top */
+/* 胶带 */
 .photos__tape {
   position: absolute;
   top: -10px;
@@ -183,7 +293,6 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   pointer-events: none;
 }
 
-/* Alternate tape rotation for variety */
 .photos__item:nth-child(even) .photos__tape {
   transform: translateX(-50%) rotate(1.5deg);
 }
@@ -215,7 +324,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   opacity: 0.7;
 }
 
-/* White photo border like a print */
+/* 白色边框模拟拍立得相纸 */
 .photos__item::after {
   content: '';
   position: absolute;
@@ -227,13 +336,86 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   box-shadow: inset 0 0 0 1px rgba(200, 160, 180, 0.2);
 }
 
+/* 删除按钮 */
+.photos__delete {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 20;
+  backdrop-filter: blur(2px);
+}
+.photos__item:hover .photos__delete {
+  opacity: 1;
+}
+.photos__delete:hover {
+  background: rgba(200, 60, 60, 0.8);
+}
+
+/* 添加照片按钮 */
+.photos__add-btn {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent, #e8a0b0);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 40px;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 100;
+  transition: transform 0.2s, background 0.2s;
+}
+.photos__add-btn:hover {
+  transform: scale(1.02);
+  background: #d48a9a;
+}
+
+/* 移动端适配 – 错落布局，取消强制统一宽度 */
 @media (max-width: 640px) {
   .photos__wall {
     gap: var(--space-4);
   }
-
+  /* 原有媒体查询的强制宽度被移除，让不同照片自然保持不同大小 */
   .photos__item {
-    width: 120px !important;
+    /* 确保小屏不超出，但保留各自宽度（小140/中170/大200）会自适应容器 */
+    max-width: calc(50% - 0.8rem);
+    flex-shrink: 1;
   }
+  /* 调整胶带大小 */
+  .photos__tape {
+    width: 32px;
+    height: 14px;
+    top: -8px;
+  }
+  .photos__add-btn {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    bottom: 16px;
+    right: 16px;
+  }
+}
+
+@keyframes sway {
+  0% { transform: rotate(0deg) translateY(0); }
+  50% { transform: rotate(1deg) translateY(-4px); }
+  100% { transform: rotate(0deg) translateY(0); }
 }
 </style>

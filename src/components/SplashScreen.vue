@@ -9,9 +9,8 @@
     </div>
 
     <div class="splash__center">
-      <div class="splash__line1">Hi CR ✨</div>
-      <div class="splash__line2">今天也要被温柔包围。</div>
-      <button class="splash__btn" @click.stop="handleEnter">点击进入</button>
+      <div class="splash__line1">Hi 曹蕊 ✨</div>
+      <div class="splash__line2">今天也要保持开心哦</div>
     </div>
   </div>
 </template>

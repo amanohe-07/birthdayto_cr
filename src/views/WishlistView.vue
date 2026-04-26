@@ -6,7 +6,7 @@
       <div class="feature-header">
         <div class="feature-icon">✨</div>
         <h1 class="feature-title">心愿单</h1>
-        <p class="feature-sub">写下你的心愿，慢慢去实现 💕</p>
+        <p class="feature-sub">写下心愿，慢慢去实现（也可以分享给我 :）</p>
       </div>
 
       <div class="wishlist-card card">
@@ -45,8 +45,8 @@
           </li>
         </transition-group>
 
-        <p v-if="wishes.length === 0" class="wishlist-empty">还没有心愿，快添加吧 💕</p>
-        <p v-if="wishes.length >= 20" class="wishlist-limit">已达上限 (20/20)</p>
+        <p v-if="wishes.length === 0" class="wishlist-empty">还没有心愿，快添加吧</p>
+        <p v-if="wishes.length >= 100" class="wishlist-limit">停停停，可以把愿望分享出来实现哦！</p>
 
         <div v-if="wishes.length > 0" class="wishlist-stats">
           已完成 {{ doneCount }} / {{ wishes.length }} 个心愿
@@ -80,7 +80,7 @@ function save() {
 
 function addWish() {
   const text = newWish.value.trim()
-  if (!text || wishes.value.length >= 20) return
+  if (!text || wishes.value.length >= 100) return
   wishes.value.push({ id: Date.now(), text, done: false })
   newWish.value = ''
   save()

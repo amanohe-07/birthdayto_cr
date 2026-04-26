@@ -5,7 +5,7 @@
 
       <div class="feature-header">
         <h1 class="feature-title">🎂 戳一戳蛋糕</h1>
-        <p class="feature-sub">点击蛋糕，送 CR 一份甜甜的祝福 💕</p>
+        <p class="feature-sub">点击蛋糕，虽然没什么用哈哈</p>
       </div>
 
       <div class="cake-stage">
@@ -56,7 +56,7 @@
 
         <div class="cake-feedback">
           <p class="cake-hint" v-if="pokeCount === 0">点击蛋糕 →</p>
-          <p class="cake-count" v-else>已投喂 <strong>{{ pokeCount }}</strong> 次 💕</p>
+          <p class="cake-count" v-else>已经戳了 <strong>{{ pokeCount }}</strong> 次</p>
         </div>
       </div>
     </div>

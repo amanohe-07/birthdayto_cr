@@ -1,7 +1,7 @@
 <template>
   <div class="music-player">
     <transition name="toast-fade">
-      <div v-if="showToast" class="music-toast">🎵 点击右下角开启音乐</div>
+      <div v-if="showToast" class="music-toast">🎵 点击右下角关闭音乐</div>
     </transition>
     <button
       class="music-btn"

@@ -7,7 +7,7 @@
             <div class="modal-deco">
               <span v-for="i in 8" :key="i" class="modal-star" :style="starStyle(i)">✨</span>
             </div>
-            <div class="modal-title">🎊 彩蛋解锁！</div>
+            <div class="modal-title">🎊 小彩蛋</div>
             <div class="modal-body">
               <p>彩蛋施工中… ✨</p>
               <p>（可替换为你专属的隐藏惊喜）</p>

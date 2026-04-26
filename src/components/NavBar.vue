@@ -2,7 +2,7 @@
   <nav class="navbar" :class="{ 'navbar--scrolled': scrolled }">
     <div class="navbar__inner">
       <router-link to="/" class="navbar__brand">
-        CR's Space <span class="navbar__heart">💗</span>
+        lucky every day <span class="navbar__heart">🌸</span>
       </router-link>
 
       <div class="navbar__links" :class="{ 'navbar__links--open': menuOpen }">
@@ -34,10 +34,10 @@ const scrolled = ref(false)
 const menuOpen = ref(false)
 
 const links = [
-  { to: '/', label: '🏠 Home' },
-  { to: '/wishes', label: '💌 Wishes' },
-  { to: '/photos', label: '📸 Photos' },
-  { to: '/letter', label: '✉️ Letter' },
+  { to: '/', label: '首页' },
+  { to: '/wishes', label: '祝福' },
+  { to: '/photos', label: '照片墙' },
+  { to: '/letter', label: '信' },
 ]
 
 function onScroll() { scrolled.value = window.scrollY > 20 }
