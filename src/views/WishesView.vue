@@ -1,6 +1,7 @@
 <template>
   <main class="wishes" @click="resumeAll">
-    <div class="wishes__strips-container" aria-hidden="true">
+    <!-- Floating wish strips -->
+    <div class="wishes__strips-container" aria-hidden="false">
       <div
         v-for="strip in strips"
         :key="strip.id"
@@ -13,19 +14,159 @@
       </div>
     </div>
 
+    <!-- Large message board card (decorative backdrop) -->
     <div class="wishes__board-wrap" ref="boardRef">
       <div class="wishes__board glass card reveal-hidden" :class="{ 'reveal-visible': boardVisible }">
         <h2 class="wishes__board-title">💌 祝福留言板</h2>
-        <ul class="wishes__board-list">
-          <li v-for="(w, i) in wishes" :key="i" class="wishes__board-item" :style="{ animationDelay: `${i * 0.08}s` }">
-            <span class="wishes__board-dot">💗</span>
-            {{ w }}
-          </li>
-        </ul>
+        <p class="wishes__board-hint">祝福正在飘过 · 点击暂停查看 ✨</p>
       </div>
     </div>
   </main>
 </template>
+
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+
+const boardRef = ref(null)
+const boardVisible = ref(false)
+
+const wishTexts = [
+  'CR 生日快乐！愿你永远被温柔相待 💕',
+  '愿你的每一天都像今天一样美好 🌸',
+  '你是这世界上独一无二的存在 ✨',
+  '愿所有快乐都与你不期而遇 🌈',
+  '生日快乐，愿你笑口常开 😊',
+  '岁岁平安，年年有今日 🎂',
+  '愿你的世界永远温暖明亮 ☀️',
+  '你值得所有最好的东西 💎',
+  '愿你健康快乐，万事顺遂 🍀',
+  '你的笑容是世上最美的礼物 🌺',
+  '愿你的梦想一一实现 🌟',
+  '每一个今天都是最好的你 💫',
+  '愿风调雨顺，诸事如意 🌙',
+]
+
+const colors = [
+  '#f7c5d0', '#d4b8e0', '#b8e0d4', '#fad4b4', '#b4d4f0', '#f8e8b0'
+]
+
+const strips = wishTexts.map((text, i) => ({
+  id: i,
+  text,
+  paused: false,
+  style: {
+    top: `${(i * 7 + 5) % 85 + 5}%`,
+    animationDuration: `${14 + (i % 7) * 2}s`,
+    animationDelay: `-${(i * 3.2) % 16}s`,
+    background: colors[i % colors.length],
+    opacity: 0.88,
+    zIndex: 1,
+  },
+}))
+
+function toggleStrip(strip) {
+  strip.paused = !strip.paused
+}
+
+function resumeAll() {
+  strips.forEach(s => { s.paused = false })
+}
+
+let observer = null
+
+onMounted(() => {
+  observer = new IntersectionObserver(
+    ([entry]) => { if (entry.isIntersecting) boardVisible.value = true },
+    { threshold: 0.15 }
+  )
+  if (boardRef.value) observer.observe(boardRef.value)
+})
+
+onUnmounted(() => {
+  if (observer) observer.disconnect()
+})
+</script>
+
+<style scoped>
+.wishes {
+  min-height: calc(100vh - 60px);
+  background: var(--gradient-hero);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-4);
+}
+
+.wishes__strips-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.wishes__strip {
+  position: absolute;
+  right: -340px;
+  padding: 0.4rem 1.2rem;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+  animation: floatAcross var(--dur, 16s) linear infinite;
+  cursor: pointer;
+  pointer-events: all;
+  transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
+  z-index: 1;
+}
+
+.wishes__strip--paused {
+  animation-play-state: paused;
+  transform: scale(1.12) !important;
+  box-shadow: var(--shadow-lg);
+  opacity: 1 !important;
+  z-index: 20;
+}
+
+.wishes__board-wrap {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 560px;
+}
+
+.wishes__board {
+  padding: var(--space-10) var(--space-8);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.wishes__board-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.wishes__board-hint {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+}
+
+@media (max-width: 640px) {
+  .wishes__board { padding: var(--space-8) var(--space-5); min-height: 180px; }
+}
+</style>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'

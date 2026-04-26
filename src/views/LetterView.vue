@@ -1,211 +1,281 @@
 <template>
-  <main class="letter">
-    <div class="letter__envelope-icon">✉️</div>
+  <div class="page-wrapper">
+    <!-- Scroll progress bar -->
+    <div class="scroll-progress" :style="{ width: scrollProgress + '%' }"></div>
 
-    <article class="letter__paper card">
-      <div class="letter__deco-top">
-        <span v-for="d in topDeco" :key="d" class="letter__deco-item">{{ d }}</span>
+    <section class="letter-section">
+      <div class="container">
+        <div class="section-title">
+          <div class="section-badge">✉️ A Letter</div>
+          <h2>Dear CR 💌</h2>
+          <div class="divider"></div>
+        </div>
+
+        <div class="letter-paper">
+          <!-- Doodles -->
+          <div class="doodle doodle-tl" aria-hidden="true">🌸</div>
+          <div class="doodle doodle-tr" aria-hidden="true">✨</div>
+          <div class="doodle doodle-bl" aria-hidden="true">💕</div>
+          <div class="doodle doodle-br" aria-hidden="true">🌷</div>
+
+          <div class="letter-content">
+            <p class="letter-date">{{ today }}</p>
+
+            <p class="letter-greeting">Dear CR,</p>
+
+            <p>
+              Okay so I've been trying to write this for a while, and every time I sit down to do it I end up
+              staring at a blank page because where do you even start when someone means this much to you?
+              But here goes — happy birthday. Like, truly, genuinely, from the bottom of my heart: happy birthday.
+            </p>
+
+            <p>
+              I still remember when we first properly talked. I don't think either of us knew then that this was
+              going to turn into something real and lasting. But here we are, and honestly? I'm so glad it did.
+              You came into my life and just… made it better. Not in some dramatic, movie-montage kind of way —
+              just quietly, consistently, in all the small ways that add up to a lot.
+            </p>
+
+            <p>
+              You are one of those people who makes everything more fun just by being in the room.
+              I've watched you light up conversations, make strangers feel welcome, and turn boring afternoons
+              into something we'll talk about for years. That's a rare thing, CR. Not everyone has it.
+              You do, and I hope you never stop knowing that.
+            </p>
+
+            <p>
+              I also want to say — and I mean this — that I'm proud of you. This past year hasn't been
+              perfectly smooth sailing for anyone, and you've handled it with more grace than I think you
+              give yourself credit for. You kept going when things got hard. You showed up for the people
+              who needed you. You took care of yourself even when it wasn't easy. That's growth, and it's
+              worth celebrating just as much as the big milestones.
+            </p>
+
+            <p>
+              Here are some things I hope for you in this new year of your life: I hope you get to travel
+              somewhere that makes you feel completely alive. I hope you eat your favorite meal at least
+              once a week (honestly you deserve it every day). I hope you find something new that excites you —
+              a hobby, a show, a place, a person — and that it brings you real joy. I hope the things you've
+              been working toward start to click into place, not because you've been worrying about them,
+              but because you've been putting in the quiet, steady work.
+            </p>
+
+            <p>
+              I hope you have more mornings where you wake up and just feel good. Not thrilled, not ecstatic —
+              just good. Settled. Okay. Like the day is yours and you can do with it what you want.
+              I think those ordinary, peaceful mornings are underrated, and you deserve a lot of them.
+            </p>
+
+            <p>
+              Also — selfishly — I hope we get to make more memories together. More late nights that turn into
+              early mornings. More random messages that turn into hour-long conversations. More moments where we're
+              both laughing so hard at something that wouldn't even be funny to anyone else. Those are my favorite
+              kind of moments, and I want more of them with you.
+            </p>
+
+            <p>
+              There's this thing about birthdays — they're supposed to be about cake and presents and party hats,
+              which, yes, absolutely, please. But they're also about pausing and recognizing that you exist in the
+              world and that the world is genuinely better for it. And I believe that about you, CR. You make the
+              world better. Not in some grand, sweeping way that ends up in history books — but in the real,
+              human way that actually matters. The way you listen. The way you care. The way you show up.
+            </p>
+
+            <p>
+              So on your birthday, I just want you to know: you are loved. You are appreciated. You are seen.
+              And you deserve every single good thing that comes your way this year.
+            </p>
+
+            <p>
+              Now go enjoy your day. Eat the cake. Take the nap. Do absolutely nothing productive if that's what
+              you want. You've earned it just by being you.
+            </p>
+
+            <p class="letter-closing">
+              With so much love and all the best vibes,<br>
+              <span class="letter-signature">Your friend, always 💖</span>
+            </p>
+          </div>
+        </div>
       </div>
-
-      <p class="letter__greeting reveal-hidden" ref="el0" :class="{ 'reveal-visible': visible[0] }">亲爱的 CR，</p>
-
-      <p class="letter__para reveal-hidden" ref="el1" :class="{ 'reveal-visible': visible[1] }">
-        不知道你打开这封信的时候，是什么样的心情。<br />
-        也许你刚刚生日，也许你在某个普通的下午突然想起了这个小角落。
-      </p>
-
-      <p class="letter__para reveal-hidden" ref="el2" :class="{ 'reveal-visible': visible[2] }">
-        无论如何，我想让你知道——<br />
-        你值得被爱，值得一切美好。
-      </p>
-
-      <p class="letter__para reveal-hidden" ref="el3" :class="{ 'reveal-visible': visible[3] }">
-        这些年来，你走过了那么多，也笑过了那么多。<br />
-        你知道吗，你的笑容是这世界上最不需要理由就能让人快乐的东西。
-      </p>
-
-      <p class="letter__para reveal-hidden" ref="el4" :class="{ 'reveal-visible': visible[4] }">
-        你会有很多很多个生日，但每一个都是独一无二的。<br />
-        愿你的每一岁都比上一岁更勇敢，也更温柔。
-      </p>
-
-      <p class="letter__para reveal-hidden" ref="el5" :class="{ 'reveal-visible': visible[5] }">
-        愿你所爱之人都爱你，<br />
-        愿你想去的地方都能到达，<br />
-        愿你做梦时轻盈，醒来时满足。
-      </p>
-
-      <p class="letter__para reveal-hidden" ref="el6" :class="{ 'reveal-visible': visible[6] }">
-        这个小小的网页是为你而建的，<br />
-        里面藏着我想对你说的话，和对你的祝愿。<br />
-        希望每次打开，都能感受到被温柔包围。
-      </p>
-
-      <p class="letter__para reveal-hidden" ref="el7" :class="{ 'reveal-visible': visible[7] }">
-        生日快乐，CR。<br />
-        往后的每一年，都要被温柔以待。
-      </p>
-
-      <div class="letter__signature reveal-hidden" ref="el8" :class="{ 'reveal-visible': visible[8] }">
-        <span class="letter__sign-deco">🌸 🌸 🌸</span>
-        <p class="letter__sign-name">爱你的朋友</p>
-        <p class="letter__sign-date">2006.05.01 ~ 永远</p>
-      </div>
-
-      <div class="letter__deco-bottom">
-        <span v-for="d in bottomDeco" :key="d.id" class="letter__pressed-flower" :style="d.style">{{ d.char }}</span>
-      </div>
-    </article>
-  </main>
+    </section>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 
-const topDeco = ['🌸', '✨', '💕', '⭐', '🌸']
-const bottomDeco = [
-  { id: 1, char: '🌺', style: { left: '10%', animationDelay: '0s' } },
-  { id: 2, char: '🌸', style: { left: '30%', animationDelay: '0.4s' } },
-  { id: 3, char: '💐', style: { left: '55%', animationDelay: '0.8s' } },
-  { id: 4, char: '🌼', style: { left: '75%', animationDelay: '0.2s' } },
-]
+const scrollProgress = ref(0)
 
-const refs = [ref(null), ref(null), ref(null), ref(null), ref(null), ref(null), ref(null), ref(null), ref(null)]
-const [el0, el1, el2, el3, el4, el5, el6, el7, el8] = refs
+function updateProgress() {
+  const scrollTop = window.scrollY
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight
+  scrollProgress.value = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0
+}
 
-const visible = ref(Array(9).fill(false))
-
-let observers = []
+const today = computed(() => {
+  return new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })
+})
 
 onMounted(() => {
-  refs.forEach((r, i) => {
-    if (!r.value) return
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => { visible.value[i] = true }, i * 80)
-        }
-      },
-      { threshold: 0.15 }
-    )
-    obs.observe(r.value)
-    observers.push(obs)
-  })
+  window.addEventListener('scroll', updateProgress, { passive: true })
 })
 
 onUnmounted(() => {
-  observers.forEach(o => o.disconnect())
+  window.removeEventListener('scroll', updateProgress)
 })
 </script>
 
 <style scoped>
-.letter {
+/* Scroll progress */
+.scroll-progress {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-pink-deep), var(--color-lavender-deep), var(--accent));
+  z-index: 200;
+  transition: width 0.1s linear;
+  border-radius: 0 2px 2px 0;
+}
+
+.page-wrapper {
   min-height: calc(100vh - 60px);
   background: var(--gradient-hero);
-  padding: var(--space-8) var(--space-4) var(--space-16);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-.letter__envelope-icon {
-  font-size: 3rem;
-  margin-bottom: var(--space-4);
-  animation: float 3s ease-in-out infinite;
+.letter-section {
+  padding: 3rem 0 5rem;
 }
 
-.letter__paper {
-  max-width: 640px;
+.container {
   width: 100%;
-  padding: var(--space-10) var(--space-8);
-  position: relative;
-  /* Aged paper texture via CSS gradients */
-  background:
-    radial-gradient(ellipse at 20% 30%, rgba(255, 240, 200, 0.15) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 70%, rgba(240, 200, 220, 0.1) 0%, transparent 60%),
-    var(--bg-card);
-  border-top: 3px solid var(--accent);
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
 }
 
-.letter__deco-top {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-3);
-  margin-bottom: var(--space-8);
-  font-size: 1.3rem;
+.section-title {
+  text-align: center;
+  margin-bottom: 2.5rem;
 }
 
-.letter__deco-item {
+.section-badge {
   display: inline-block;
-  animation: float 3s ease-in-out infinite;
-}
-.letter__deco-item:nth-child(2) { animation-delay: 0.3s; }
-.letter__deco-item:nth-child(3) { animation-delay: 0.6s; }
-.letter__deco-item:nth-child(4) { animation-delay: 0.9s; }
-.letter__deco-item:nth-child(5) { animation-delay: 1.2s; }
-
-.letter__greeting {
-  font-size: var(--font-size-xl);
-  font-weight: 600;
+  background: var(--bg-card);
   color: var(--accent);
-  margin-bottom: var(--space-6);
-  letter-spacing: 0.04em;
-}
-
-.letter__para {
-  font-size: var(--font-size-base);
-  color: var(--text-primary);
-  line-height: 2;
-  margin-bottom: var(--space-6);
-  letter-spacing: 0.02em;
-  /* Gentle indent like letter format */
-  text-indent: 2em;
-}
-
-.letter__signature {
-  margin-top: var(--space-8);
-  padding-top: var(--space-6);
-  border-top: 1px dashed var(--border-color);
-  text-align: right;
-}
-
-.letter__sign-deco {
-  display: block;
-  font-size: 1.2rem;
-  margin-bottom: var(--space-3);
-  letter-spacing: 0.5rem;
-}
-
-.letter__sign-name {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--accent);
-  margin-bottom: var(--space-1);
-}
-
-.letter__sign-date {
   font-size: var(--font-size-sm);
-  color: var(--text-muted);
+  font-weight: 700;
+  padding: 0.35rem 1.1rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.03em;
 }
 
-.letter__deco-bottom {
+.section-title h2 {
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-pink-deep), var(--color-lavender-deep));
+  border-radius: 2px;
+  margin: 0 auto;
+}
+
+.letter-paper {
   position: relative;
-  height: 40px;
-  margin-top: var(--space-6);
+  background: #FEFBF3;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg), inset 0 0 0 1px rgba(232, 160, 176, 0.15);
+  padding: 4rem 3.5rem;
+  max-width: 740px;
+  margin: 0 auto;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 31px,
+    rgba(199, 206, 234, 0.3) 31px,
+    rgba(199, 206, 234, 0.3) 32px
+  );
+  background-size: 100% 32px;
 }
 
-.letter__pressed-flower {
-  position: absolute;
-  bottom: 0;
-  font-size: 1.3rem;
-  animation: float 4s ease-in-out infinite;
-  opacity: 0.75;
+[data-theme="dark"] .letter-paper {
+  background-color: rgba(40, 28, 50, 0.95);
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 31px,
+    rgba(199, 206, 234, 0.08) 31px,
+    rgba(199, 206, 234, 0.08) 32px
+  );
 }
+
+.letter-content {
+  position: relative;
+  z-index: 1;
+}
+
+.letter-content p {
+  font-size: 1.05rem;
+  line-height: 2;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.letter-date {
+  color: var(--text-muted) !important;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em;
+  margin-bottom: 2rem !important;
+}
+
+.letter-greeting {
+  font-size: 1.4rem !important;
+  font-weight: 800 !important;
+  color: var(--accent) !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.letter-closing {
+  margin-top: 2rem !important;
+  font-size: 1.05rem !important;
+  line-height: 1.8 !important;
+}
+
+.letter-signature {
+  display: inline-block;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--accent);
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+/* Doodles */
+.doodle {
+  position: absolute;
+  font-size: 1.75rem;
+  opacity: 0.35;
+  pointer-events: none;
+  animation: floatSlow 3s ease-in-out infinite;
+}
+
+.doodle-tl { top: 1.5rem; left: 1.5rem; animation-delay: 0s; }
+.doodle-tr { top: 1.5rem; right: 1.5rem; animation-delay: 0.5s; }
+.doodle-bl { bottom: 1.5rem; left: 1.5rem; animation-delay: 1s; }
+.doodle-br { bottom: 1.5rem; right: 1.5rem; animation-delay: 1.5s; }
 
 @media (max-width: 640px) {
-  .letter__paper {
-    padding: var(--space-6) var(--space-5);
+  .letter-paper {
+    padding: 2.5rem 1.5rem;
   }
-  .letter__para { text-indent: 1em; }
 }
 </style>
