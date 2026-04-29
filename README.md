@@ -136,3 +136,15 @@ src/
 4. 等待 `Actions` 里名为 “Deploy to GitHub Pages” 的 workflow 跑完
 
 部署完成后地址通常是：`https://<user>.github.io/<repo>/`
+
+### Vercel
+
+本项目路由使用 Hash 模式（`createWebHashHistory`），部署到 Vercel 不需要额外的重写规则。
+
+1. 登录 Vercel → `Add New...` → `Project`
+2. 选择该 GitHub 仓库并导入
+3. Framework 选择 `Vite`（一般会自动识别）
+4. Build Command：`npm run build`
+5. Output Directory：`dist`
+
+然后点击 Deploy 即可。
