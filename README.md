@@ -124,4 +124,15 @@ src/
 ## 📦 部署提示
 
 - 路由是 Hash 模式，部署到任意静态托管（GitHub Pages / Netlify / Vercel / 服务器 Nginx）一般无需额外后端重写规则。
-- 如果部署到“子路径”（例如 GitHub Pages 的 `https://<user>.github.io/<repo>/`），Vite 可能需要设置 `base`（如 `base: '/<repo>/'`）以保证静态资源路径正确。
+- 如果部署到“子路径”（例如 GitHub Pages 的 `https://<user>.github.io/<repo>/`），需要保证 Vite 的 `base` 设置正确；本项目已在 `vite.config.js` 配置为相对路径（`base: './'`），可直接用于 GitHub Pages。
+
+### GitHub Pages（推荐：GitHub Actions 自动部署）
+
+仓库已包含工作流：`.github/workflows/deploy-pages.yml`，会在每次 push 到 `main` 时自动构建并部署到 GitHub Pages。
+
+1. 推送代码到 GitHub 的 `main` 分支
+2. 在 GitHub 仓库页面进入 `Settings` → `Pages`
+3. `Build and deployment` 里把 `Source` 设置为 `GitHub Actions`
+4. 等待 `Actions` 里名为 “Deploy to GitHub Pages” 的 workflow 跑完
+
+部署完成后地址通常是：`https://<user>.github.io/<repo>/`
