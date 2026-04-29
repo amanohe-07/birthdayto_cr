@@ -87,6 +87,12 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'Handwriting';
+  src: url('../assets/ttf/handwriting.ttf') format('truetype');
+  font-display: swap;
+}
+
 /* Scroll progress */
 .scroll-progress {
   position: fixed;
@@ -179,6 +185,7 @@ onUnmounted(() => {
 .letter-content {
   position: relative;
   z-index: 1;
+  font-family: 'Handwriting', cursive, var(--font-family);
 }
 
 .letter-content p {

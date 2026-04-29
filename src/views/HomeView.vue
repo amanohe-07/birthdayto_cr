@@ -17,7 +17,7 @@
             class="gradient-text hero-cr"
             @click="easterEggOpen = true"
             title="点我有惊喜！"
-          >CR!</span>
+          >曹蕊!</span>
           <span class="cake-icon">🎂</span>
         </h1>
 
@@ -29,7 +29,7 @@
         <div class="countdown-wrapper animate-fade-up delay-300">
           <p class="countdown-label">{{ countdownMessage }}</p>
           <div v-if="isBirthday" class="birthday-today">
-            <span class="birthday-today-text">🎂 Happy Birthday, CR! 🎂</span>
+            <span class="birthday-today-text">🎂 Happy Birthday, 曹蕊! 🎂</span>
             <span class="birthday-today-badge">今天就是你的生日！</span>
           </div>
           <div v-else class="countdown-grid">
