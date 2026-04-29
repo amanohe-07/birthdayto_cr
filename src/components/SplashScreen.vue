@@ -11,6 +11,7 @@
     <div class="splash__center">
       <div class="splash__line1">Hi 曹蕊 ✨</div>
       <div class="splash__line2">今天也要保持开心哦</div>
+      <div class="splash__line3">点击进入</div>
     </div>
   </div>
 </template>
@@ -96,7 +97,11 @@ function handleEnter() {
   letter-spacing: 0.05em;
   animation: fadeInUp 0.7s ease 0.5s both;
 }
-
+.splash__line3 {
+  font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+  color: rgba(255, 255, 255, 0.8);
+  animation: fadeInUp 0.7s ease 0.7s both;
+}
 .splash__btn {
   background: rgba(255, 255, 255, 0.25);
   border: 2px solid rgba(255, 255, 255, 0.7);

@@ -57,17 +57,17 @@
 
         <!-- Main nav buttons -->
         <div class="hero-buttons animate-fade-up delay-400">
-          <RouterLink to="/wishes" class="btn btn-primary">💌 祝福</RouterLink>
-          <RouterLink to="/photos" class="btn btn-secondary">📸 照片墙</RouterLink>
-          <RouterLink to="/letter" class="btn btn-outline">✉️ 信</RouterLink>
+          <RouterLink to="/wishes" class="btn btn-primary">祝福</RouterLink>
+          <RouterLink to="/photos" class="btn btn-secondary">照片墙</RouterLink>
+          <RouterLink to="/letter" class="btn btn-outline">信</RouterLink>
         </div>
 
         <!-- Feature entry capsules -->
         <!-- 剩下三个改成和上面三个一样的样式 -->
         <div class="hero-buttons animate-fade-up delay-400">
-          <RouterLink to="/wishlist" class="btn btn-primary2">✨ 心愿</RouterLink>
-          <RouterLink to="/cake" class="btn btn-secondary2">🎂 戳蛋糕</RouterLink>
-          <RouterLink to="/fortune" class="btn btn-outline2">🔮 运势</RouterLink>
+          <RouterLink to="/wishlist" class="btn btn-primary2">心愿</RouterLink>
+          <RouterLink to="/cake" class="btn btn-secondary2">戳蛋糕</RouterLink>
+          <RouterLink to="/fortune" class="btn btn-outline2">运势</RouterLink>
         </div>
       </div>
     </section>

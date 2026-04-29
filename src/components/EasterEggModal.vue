@@ -7,10 +7,10 @@
             <div class="modal-deco">
               <span v-for="i in 8" :key="i" class="modal-star" :style="starStyle(i)">✨</span>
             </div>
-            <div class="modal-title">🎊 小彩蛋</div>
+            <div class="modal-title">小tip</div>
             <div class="modal-body">
-              <p>彩蛋施工中… ✨</p>
-              <p>（可替换为你专属的隐藏惊喜）</p>
+              <p>总感觉直接写名字有点怪</p>
+              <p>（但是好像也没有对你什么其它的称呼）</p>
               <div class="modal-floaties">
                 <span v-for="e in emojis" :key="e.id" class="modal-floaty" :style="e.style">{{ e.char }}</span>
               </div>
@@ -29,7 +29,7 @@ const emit = defineEmits(['update:modelValue'])
 function close() { emit('update:modelValue', false) }
 
 const emojis = [
-  { id: 1, char: '💕', style: { animationDuration: '2s', animationDelay: '0s' } },
+  { id: 1, char: '☁️', style: { animationDuration: '2s', animationDelay: '0s' } },
   { id: 2, char: '⭐', style: { animationDuration: '2.4s', animationDelay: '0.3s' } },
   { id: 3, char: '🌸', style: { animationDuration: '1.8s', animationDelay: '0.6s' } },
   { id: 4, char: '💫', style: { animationDuration: '2.2s', animationDelay: '0.1s' } },
